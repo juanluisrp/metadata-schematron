@@ -8,6 +8,7 @@
 	<sch:ns uri="http://www.w3.org/2004/02/skos/core#" prefix="skos"/>
     <sch:ns uri="http://www.opengis.net/gml" prefix="gml"/>
 	<sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi"/>
+	<sch:ns prefix="geonet" uri="http://www.fao.org/geonetwork"/>
 
 	<sch:let name="lowercase" value="'abcdefghijklmnopqrstuvwxyz'"/>
 	<sch:let name="uppercase" value="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
@@ -65,7 +66,7 @@
 			<sch:let name="hierarchyLevelName" value="string(gmd:hierarchyLevelName[1]/gco:CharacterString)"/>
 
 		<!-- Metadata verantwoordelijke organisatie (name) https://docs.geostandaarden.nl/md/mdprofiel-iso19119/#verantwoordelijke-organisatie-metadata -->
-			<sch:let name="mdResponsibleParty_OrganisationString" value="normalize-space(gmd:contact[1]/gmd:CI_ResponsibleParty/gmd:organisationName[gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="mdResponsibleParty_OrganisationString" value="normalize-space(string-join(gmd:contact[1]/gmd:CI_ResponsibleParty/gmd:organisationName[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 			<sch:let name="mdResponsibleParty_OrganisationURI" value="normalize-space(gmd:contact[1]/gmd:CI_ResponsibleParty/gmd:organisationName/gmx:Anchor/@xlink:href)"/>
 
 		<!-- Metadata verantwoordelijke organisatie (role) INSPIRE in combi met INSPIRE specificatie-->
@@ -178,7 +179,7 @@
 
 		<!-- Trefwoorden NL profie -->
 
-			<sch:let name="keyword" value="normalize-space(gmd:identificationInfo[1]/*/gmd:descriptiveKeywords[1]/*/gmd:keyword[1][gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="keyword" value="normalize-space(string-join(gmd:identificationInfo[1]/*/gmd:descriptiveKeywords[1]/*/gmd:keyword[1][gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 
 		<!-- eind Trefwoorden NL profiel  -->
 		<!-- Als  de GEMET INSPIRE themes thesaurus voorkomt, is verwijzing naar inspire specificatie verplicht -->
@@ -312,7 +313,7 @@
 			</sch:report>
 
 			<!-- Thijs Brentjens: nieuwe controle op codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19119/#codelist-datalicenties -->
-			<sch:assert id="Overige_beperkingen_en_codelijst_Datalicenties" etf_name="Overige beperkingen en codelijst Datalicenties" test="not($accessConstraints_value = 'otherRestrictions') or ($accessConstraints_value = 'otherRestrictions' and $otherConstraintIsCodelistdatalicense)">Als het element juridische toegangsrestricties de waarde otherRestrictions bevat dient een link uit de codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19119/#codelist-datalicenties naar de licentie en de bijbehorende beschrijving opgenomen te worden. Opgenomen informatie: <sch:value-of select="$otherConstraint1"/> met licentie: <sch:value-of select="$otherConstraintURI1/@xlink:href"/> <sch:value-of select="$otherConstraint2"/> en <sch:value-of select="$otherConstraint2"/> <sch:value-of select="$otherConstraintURI2/@xlink:href"/> <sch:value-of select="$otherConstraint1"/></sch:assert>
+			<sch:assert id="Overige_beperkingen_en_codelijst_Datalicenties" etf_name="Overige beperkingen en codelijst Datalicenties" test="not($accessConstraints_value = 'otherRestrictions') or ($accessConstraints_value = 'otherRestrictions' and $otherConstraintIsCodelistdatalicense)">Als het element juridische toegangsrestricties de waarde otherRestrictions bevat dient een link uit de codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19119/#codelist-datalicenties naar de licentie en de bijbehorende beschrijving opgenomen te worden. Opgenomen informatie: <sch:value-of select="$otherConstraint1"/> met licentie: <sch:value-of select="normalize-space($otherConstraintURI1/@xlink:href)"/> <sch:value-of select="$otherConstraint2"/> en <sch:value-of select="$otherConstraint2"/> <sch:value-of select="normalize-space($otherConstraintURI2/@xlink:href)"/> <sch:value-of select="$otherConstraint1"/></sch:assert>
 
 			<!-- optional / conditional: test verwijderen -->
 			<!-- <sch:assert id="Code_referentiesysteem_ISO_nr_207" etf_name="Code referentiesysteem (ISO nr. 207)" test="$referenceSystemInfo">Code referentiesysteem (https://docs.geostandaarden.nl/md/mdprofiel-iso19119/#codereferentiesysteem) ontbreekt</sch:assert> -->
@@ -751,14 +752,14 @@ Deze keywords  komen niet overeen met GEMET- INSPIRE themes thesaurus. gevonden 
 		</sch:rule>
 
 		<sch:rule id="Waarschuwingen_-_Algemene_metadata_regels" etf_name="Waarschuwingen - Algemene metadata regels" context="/gmd:MD_Metadata">
-			<sch:let name="conformity_Spec_Title1" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[1]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title2" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[2]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title3" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[3]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title4" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[4]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title5" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[5]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title6" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[6]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title7" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[7]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
-			<sch:let name="conformity_Spec_Title8" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[8]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="conformity_Spec_Title1" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[1]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title2" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[2]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title3" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[3]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title4" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[4]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title5" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[5]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title6" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[6]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title7" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[7]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
+			<sch:let name="conformity_Spec_Title8" value="normalize-space(string-join(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report[8]/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 
 			<sch:let name="conformity_Spec_Title_All" value="concat(string($conformity_Spec_Title1),string($conformity_Spec_Title2),string($conformity_Spec_Title3),string($conformity_Spec_Title4),string($conformity_Spec_Title5),string($conformity_Spec_Title6),string($conformity_Spec_Title7),string($conformity_Spec_Title8))"/>
 			<sch:let name="conformity_Spec_Title_Interoperability_Exsists" value="contains($conformity_Spec_Title_All,'VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens')"/>

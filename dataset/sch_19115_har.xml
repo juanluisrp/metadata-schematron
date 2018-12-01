@@ -9,6 +9,7 @@
 	<sch:ns uri="http://www.w3.org/2004/02/skos/core#" prefix="skos"/>
 	<sch:let name="lowercase" value="'abcdefghijklmnopqrstuvwxyz'"/>
 	<sch:let name="uppercase" value="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
+	<sch:ns prefix="geonet" uri="http://www.fao.org/geonetwork"/>
 	<!-- werkt nog niet
 	<sch:let name="gemet-nl" value="document('GEMET-InspireThemes-nl.rdf')"/>
 	-->
@@ -152,11 +153,11 @@
 			<sch:let name="responsibleParty_Role" value="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact[1]/gmd:CI_ResponsibleParty/gmd:role/*[@codeListValue = 'resourceProvider' or @codeListValue = 'custodian' or @codeListValue = 'owner' or @codeListValue = 'user' or @codeListValue = 'distributor' or @codeListValue = 'owner' or @codeListValue = 'originator' or @codeListValue = 'pointOfContact' or @codeListValue = 'principalInvestigator' or @codeListValue = 'processor' or @codeListValue = 'publisher' or @codeListValue = 'author']"/>
 
 		<!-- 5.2.13 Trefwoord https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#trefwoord -->
-			<sch:let name="keyword" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords[1]/gmd:MD_Keywords/gmd:keyword[1][gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="keyword" value="normalize-space(string-join(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords[1]/gmd:MD_Keywords/gmd:keyword[1][gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 
 		<!-- 5.2.4 Unieke Identifier van de bron, https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#unieke-identifier-van-de-bron -->
 			<!-- <sch:let name="identifierAll" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code[./gco:CharacterString or ./gmx:Anchor/]/*)"/> -->
-			<sch:let name="identifierString" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code[./gco:CharacterString or ./gmx:Anchor]/*)"/>
+			<sch:let name="identifierString" value="normalize-space(string-join(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code[./gco:CharacterString or ./gmx:Anchor]//text(), ''))"/>
 
 			<!-- Het gebuik van een URI is conditioneel, het is verplicht voor INSPIRE datasets. -->
 			<sch:let name="identifierURI" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:identifier/gmd:MD_Identifier/gmd:code/gmx:Anchor/@xlink:href)"/>
@@ -178,7 +179,7 @@
 
 		<!-- Thema's, Onderwerp https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#onderwerp
 		codelijst : https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-spatialrepresentationtypecode -->
-			<sch:let name="topicCategory" value="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/*[text() = 'farming' or text() = 'biota' or text() = 'boundaries' or text() = 'climatologyMeteorologyAtmosphere' or text() = 'economy' or text() = 'elevation' or text() = 'environment' or text() = 'geoscientificInformation' or text() = 'health' or text() = 'imageryBaseMapsEarthCover' or text() = 'intelligenceMilitary' or text() = 'inlandWaters' or text() = 'location' or text() = 'oceans' or text() = 'planningCadastre' or text() = 'society' or text() = 'structure' or text() = 'transportation' or text() = 'utilitiesCommunication']"/>
+			<sch:let name="topicCategory" value="gmd:identificationInfo/gmd:MD_DataIdentification/gmd:topicCategory/*[normalize-space(string-join(text(), '')) = 'farming' or normalize-space(string-join(text(), '')) = 'biota' or normalize-space(string-join(text(), '')) = 'boundaries' or normalize-space(string-join(text(), '')) = 'climatologyMeteorologyAtmosphere' or normalize-space(string-join(text(), '')) = 'economy' or normalize-space(string-join(text(), '')) = 'elevation' or normalize-space(string-join(text(), '')) = 'environment' or normalize-space(string-join(text(), '')) = 'geoscientificInformation' or normalize-space(string-join(text(), '')) = 'health' or normalize-space(string-join(text(), '')) = 'imageryBaseMapsEarthCover' or normalize-space(string-join(text(), '')) = 'intelligenceMilitary' or normalize-space(string-join(text(), '')) = 'inlandWaters' or normalize-space(string-join(text(), '')) = 'location' or normalize-space(string-join(text(), '')) = 'oceans' or normalize-space(string-join(text(), '')) = 'planningCadastre' or normalize-space(string-join(text(), '')) = 'society' or normalize-space(string-join(text(), '')) = 'structure' or normalize-space(string-join(text(), '')) = 'transportation' or normalize-space(string-join(text(), '')) = 'utilitiesCommunication']"/>
 
 		<!-- Gebruiksbeperkingen, https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#gebruiksbeperkingen -->
 			<sch:let name="useLimitation" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints[1]/gmd:MD_Constraints/gmd:useLimitation[1]/gco:CharacterString)"/>
@@ -194,8 +195,8 @@
 	 		<!-- Tests of een waarde of label is opgegeven
 			Bij Anchors: of het element ook een xlink:href heeft
 			-->
-			<sch:let name="otherConstraint1" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[1][gco:CharacterString or gmx:Anchor/@xlink:href]/*)"/>
-			<sch:let name="otherConstraint2" value="normalize-space(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[2][gco:CharacterString or gmx:Anchor/@xlink:href]/*)"/>
+			<sch:let name="otherConstraint1" value="normalize-space(string-join(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[1][gco:CharacterString or gmx:Anchor/@xlink:href]//text(), ''))"/>
+			<sch:let name="otherConstraint2" value="normalize-space(string-join(gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[2][gco:CharacterString or gmx:Anchor/@xlink:href]//text(), ''))"/>
 
 			<sch:let name="otherConstraints" value="concat($otherConstraint1,$otherConstraint2)"/>
 
@@ -350,7 +351,7 @@
 			</sch:report>
 
 			<!-- Thijs Brentjens: nieuwe controle op codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-datalicenties -->
-			<sch:assert id="Overige_beperkingen_en_codelijst_Datalicenties" etf_name="Overige beperkingen en codelijst Datalicenties" test="not($accessConstraints_value = 'otherRestrictions') or ($accessConstraints_value = 'otherRestrictions' and $otherConstraintIsCodelistdatalicense)">Als het element juridische toegangsrestricties de waarde otherRestrictions bevat dient een link uit de codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-datalicenties naar de licentie en de bijbehorende beschrijving opgenomen te worden. Opgenomen informatie: <sch:value-of select="$otherConstraint1"/> met licentie: <sch:value-of select="$otherConstraintURI1/@xlink:href"/> <sch:value-of select="$otherConstraint2"/> en <sch:value-of select="$otherConstraint2"/> <sch:value-of select="$otherConstraintURI2/@xlink:href"/> <sch:value-of select="$otherConstraint1"/></sch:assert>
+			<sch:assert id="Overige_beperkingen_en_codelijst_Datalicenties" etf_name="Overige beperkingen en codelijst Datalicenties" test="not($accessConstraints_value = 'otherRestrictions') or ($accessConstraints_value = 'otherRestrictions' and $otherConstraintIsCodelistdatalicense)">Als het element juridische toegangsrestricties de waarde otherRestrictions bevat dient een link uit de codelijst https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codelist-datalicenties naar de licentie en de bijbehorende beschrijving opgenomen te worden. Opgenomen informatie: <sch:value-of select="$otherConstraint1"/> met licentie: <sch:value-of select="normalize-space($otherConstraintURI1/@xlink:href)"/> <sch:value-of select="$otherConstraint2"/> en <sch:value-of select="$otherConstraint2"/> <sch:value-of select="normalize-space($otherConstraintURI2/@xlink:href)"/> <sch:value-of select="$otherConstraint1"/></sch:assert>
 
 			<!-- Voor INSPIRE moet accessConstraints_value aanwezig zijn -->
 			<sch:assert id="Juridische_toegangsrestricties_verplicht_met_'otherRestrictions'_aanwezig" etf_name="Juridische toegangsrestricties verplicht met 'otherRestrictions' aanwezig" test="$accessConstraints_value">Het element Juridische toegangsrestricties met de waarde 'otherRestrictions' is niet aanwezig, maar is wel verplicht voor INSPIRE  (https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#juridische-toegangsrestricties).</sch:assert>
@@ -375,12 +376,12 @@
 			<sch:assert id="Code_referentiesysteem_ISO_nr_207" etf_name="Code referentiesysteem (ISO nr. 207)" test="$referenceSystemInfo">Code referentiesysteem (https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#codereferentiesysteem) ontbreekt</sch:assert>
 
 		<!-- alle regels over elementen binnen distributionInfo -->
-			<sch:let name="distributionFormatName" value="normalize-space(gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name[gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="distributionFormatName" value="normalize-space(string-join(gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name[gco:CharacterString or gmx:Anchor]//text, ''))"/>
 
 			<sch:let name="distributionFormatVersion" value="normalize-space(gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:version/gco:CharacterString)"/>
 
 			<!-- INSPIRE Anchor -->
-			<sch:let name="distributionFormatSpecification" value="normalize-space(gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:specification[gco:CharacterString or gmx:Anchor]/*)"/>
+			<sch:let name="distributionFormatSpecification" value="normalize-space(string-join(gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:specification[gco:CharacterString or gmx:Anchor]//text, ''))"/>
 
 		<!-- Naam distributie formaat, distributie format voor INSPIRE geharmoniseerd https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#naam-distributie-formaat -->
 		<!-- Anchor, maar alleen voor INSPIRE geharmoniseerd verplicht  -->
@@ -457,7 +458,7 @@
 		Bij een URL van het type 'accessPoint' kan het element leeg gelaten worden. Aanname is dat als er geen waarde is opgegeven, het een accessPoint is.
 		Dit betekent dat er feitelijk niet getest kan worden op aanwezigheid: het ontbreken van het element is namelijk ook correct.
 		-->
-			<sch:let name="transferOptions_Description_Value" value="normalize-space(gmd:CI_OnlineResource/gmd:description[./gco:CharacterString or ./gmx:Anchor]/*)"/>
+			<sch:let name="transferOptions_Description_Value" value="normalize-space(string-join(gmd:CI_OnlineResource/gmd:description[./gco:CharacterString or ./gmx:Anchor]//text(), ''))"/>
 
 		<!-- asssertions and report -->
 			<sch:assert id="Protocol_ISO_nr_398_en_URL_ISO_nr_397" etf_name="Protocol (ISO nr. 398) en URL (ISO nr. 397)" test="not($transferOptions_URL) or ($transferOptions_URL and ($transferOptions_Protocol or $transferOptions_Mediatype))">Protocol (https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#protocol) is verplicht als URL (https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#url) is ingevuld.</sch:assert>
@@ -502,7 +503,7 @@
 
 		<!-- Specificatie title, https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#specificatie
 	 	TODO: check of URI ook bij andere tests voor conformity_SpecTitle nodig is, of dat het zo volstaat -->
-			<sch:let name="conformity_SpecTitle" value="normalize-space(gmd:specification/gmd:CI_Citation/gmd:title[./gco:CharacterString or ./gmx:Anchor]/*)"/>
+			<sch:let name="conformity_SpecTitle" value="normalize-space(string-join(gmd:specification/gmd:CI_Citation/gmd:title[./gco:CharacterString or ./gmx:Anchor]//text, ''))"/>
 			<sch:let name="conformity_SpecTitleString" value="normalize-space(gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString)"/>
 			<sch:let name="conformity_SpecTitleURI" value="normalize-space(gmd:specification/gmd:CI_Citation/gmd:title/gmx:Anchor/@xlink:href)"/>
 		<!-- Verklaring https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#verklaring -->
