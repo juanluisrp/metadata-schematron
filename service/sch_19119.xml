@@ -204,8 +204,8 @@
 		<!-- Tests of een waarde of label is opgegeven
 		Bij Anchors: of het element ook een xlink:href heeft
 		-->
-		<sch:let name="otherConstraint1" value="normalize-space(gmd:identificationInfo/*/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[1][gco:CharacterString or gmx:Anchor/@xlink:href]/*)"/>
-		<sch:let name="otherConstraint2" value="normalize-space(gmd:identificationInfo/*/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[2][gco:CharacterString or gmx:Anchor/@xlink:href]/*)"/>
+		<sch:let name="otherConstraint1" value="normalize-space(string-join(gmd:identificationInfo/*/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[1][gco:CharacterString or gmx:Anchor/@xlink:href]//text(), ''))"/>
+		<sch:let name="otherConstraint2" value="normalize-space(string-join(gmd:identificationInfo/*/gmd:resourceConstraints[2]/gmd:MD_LegalConstraints/gmd:otherConstraints[2][gco:CharacterString or gmx:Anchor/@xlink:href]//text(), ''))"/>
 
 		<sch:let name="otherConstraints" value="concat($otherConstraint1,$otherConstraint2)"/>
 
