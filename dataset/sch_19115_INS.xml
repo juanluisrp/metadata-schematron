@@ -32,7 +32,7 @@
 
 		<sch:let name="harmonised_dataset" value="normalize-space(//gmd:MD_Metadata/gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult[./gmd:specification/gmd:CI_Citation/gmd:title/gco:CharacterString= 'VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens' or ./gmd:specification/gmd:CI_Citation/gmd:title/gmx:Anchor = 'VERORDENING (EU) Nr. 1089/2010 VAN DE COMMISSIE van 23 november 2010 ter uitvoering van Richtlijn 2007/2/EG van het Europees Parlement en de Raad betreffende de interoperabiliteit van verzamelingen ruimtelijke gegevens en van diensten met betrekking tot ruimtelijke gegevens']/gmd:pass/gco:Boolean)"/>
 
-		<sch:let name="distributonFormatName" value= "normalize-space(string-join(//gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name[gco:CharacterString or gmx:Anchor]//text(), '')))"/>
+		<sch:let name="distributonFormatName" value= "normalize-space(string-join(//gmd:MD_Metadata/gmd:distributionInfo/gmd:MD_Distribution/gmd:distributionFormat/gmd:MD_Format/gmd:name[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 
 		<sch:rule id="Algemene_metadata_regels" etf_name="Algemene metadata regels"  context="/gmd:MD_Metadata">
 
@@ -515,10 +515,10 @@
 			<!-- alle regels over elementen binnen distributionInfo -->
 
 			<!-- TODO: requirement dat spec_title_exists and conformity pass -->
-				<sch:let name="distributionFormatName" value="normalize-space(string-join(gmd:name[gco:CharacterString or gmx:Anchor]//text(), '')))"/>
+				<sch:let name="distributionFormatName" value="normalize-space(string-join(gmd:name[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 				<sch:let name="distributionFormatVersion" value="normalize-space(gmd:version/gco:CharacterString)"/>
 				<!-- INSPIRE Anchor -->
-				<sch:let name="distributionFormatSpecification" value="normalize-space(string-join(gmd:specification[gco:CharacterString or gmx:Anchor]//text(), '')))"/>
+				<sch:let name="distributionFormatSpecification" value="normalize-space(string-join(gmd:specification[gco:CharacterString or gmx:Anchor]//text(), ''))"/>
 
 			<!-- Naam distributie formaat, distributie format voor INSPIRE geharmoniseerd https://docs.geostandaarden.nl/md/mdprofiel-iso19115/#naam-distributie-formaat -->
 			<!-- Anchor, maar alleen voor INSPIRE geharmoniseerd verplicht  -->
